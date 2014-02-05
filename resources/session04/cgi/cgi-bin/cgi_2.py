@@ -32,8 +32,8 @@ The request arrived at %s<br>
 </body>
 </html>""" % (
         os.environ.get('SERVER_NAME', default), # Server Hostname
-        'aaaa', # server IP
-        'bbbb', # server port
+        os.environ.get('REMOTE_HOST', default),# server IP
+        os.environ.get('SERVER_PORT', default),# server port
         'cccc', # client hostname
         'dddd', # client IP
         'eeee', # client port
