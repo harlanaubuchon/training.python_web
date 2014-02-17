@@ -17,16 +17,17 @@ def server(log_buffer=sys.stderr):
             try:
                 print >>log_buffer, 'connection - {0}:{1}'.format(*addr)
                 while True:
-                    data = conn.recv(16)
-                    print >>log_buffer, 'received "{0}"'.format(data)
-                    if data:
-                        msg = 'sending data back to client'
-                        print >>log_buffer, msg
-                        conn.sendall(data)
-                    else:
-                        msg = 'no more data from {0}:{1}'.format(*addr)
-                        print >>log_buffer, msg
+                    data = conn.recv(1024)
+                    request += data
+                    if len(data) < 1024 or not data:
                         break
+
+                req_ok =  parse_request(data)
+                print >>log_buffer, 'sending response'
+                if req_ok == True:
+                    response = response_ok()
+                    conn.sendall(response)
+
             finally:
                 conn.close()
             
@@ -34,6 +35,25 @@ def server(log_buffer=sys.stderr):
         sock.close()
         return
 
+def response_ok():
+    """returns a basic HTTP response"""
+    resp = []
+    resp.append("HTTP/1.1 200 OK")
+    resp.append("Content-Type: text/plain")
+    resp.append("")
+    resp.append("this is a pretty minimal response")
+    return "\r\n".join(resp)
+
+def parse_request(request):
+    if request[:3] != "GET":
+        raise NotImplementedError("We only accept GET")
+    print >>sys.stderr, "request is okay"
+    return True
+
+
+def response_method_not_allowed():
+    
+    return "not ok"    
 
 if __name__ == '__main__':
     server()

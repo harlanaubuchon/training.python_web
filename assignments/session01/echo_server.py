@@ -7,7 +7,9 @@ def server(log_buffer=sys.stderr):
     address = ('127.0.0.1', 10000)
     # TODO: Replace the following line with your code which will instantiate 
     #       a TCP socket with IPv4 Addressing, call the socket you make 'sock'
-    sock = None
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
     # TODO: Set an option to allow the socket address to be reused immediately
     #       see the end of http://docs.python.org/2/library/socket.html
     
@@ -16,10 +18,13 @@ def server(log_buffer=sys.stderr):
     
     # TODO: bind your new sock 'sock' to the address above and begin to listen
     #       for incoming connections
+    sock.bind(address)
+    sock.listen(5)
     
     try:
         # the outer loop controls the creation of new connection sockets. The
         # server will handle each incoming connection one at a time.
+
         while True:
             print >>log_buffer, 'waiting for a connection'
 
@@ -28,25 +33,51 @@ def server(log_buffer=sys.stderr):
             #       the client so we can report it below.  Replace the 
             #       following line with your code. It is only here to prevent
             #       syntax errors
-            addr = ('bar', 'baz')
+            (conn, addr) = sock.accept()
+            #addr = ('bar', 'baz')
             try:
                 print >>log_buffer, 'connection - {0}:{1}'.format(*addr)
 
                 # the inner loop will receive messages sent by the client in 
                 # buffers.  When a complete message has been received, the 
                 # loop will exit
-                while True:
+                buffsize = 16
+                data = ''
+                done = False
+                #while True:
                     # TODO: receive 16 bytes of data from the client. Store
                     #       the data you receive as 'data'.  Replace the 
                     #       following line with your code.  It's only here as
                     #       a placeholder to prevent an error in string 
                     #       formatting
-                    data = ''
-                    print >>log_buffer, 'received "{0}"'.format(data)
+
+                while not done:
+                    msg_part = conn.recv(buffsize)
+                    print >>log_buffer, 'received "{0}"'.format(msg_part)
+                    if len(msg_part) < buffsize:
+                        done = True
+                    data += msg_part
+                    
                     # TODO: you will need to check here to see if any data was
                     #       received.  If so, send the data you got back to 
                     #       the client.  If not, exit the inner loop and wait
                     #       for a new connection from a client
+
+
+
+                while data != '':
+                    conn.send(data[:16])
+                    print >>log_buffer, 'echoing "{0}" back to client'.format(data[:16])
+                    data = data[16:]
+
+                    if len(data) > buffsize:
+                        conn.send(data[:16])
+                        print >>log_buffer, 'echoing "{0}" back to client'.format(data)
+                        data = data[16:]                      
+                        
+                    else:
+                        data = ''
+                        break
 
             finally:
                 # TODO: When the inner loop exits, this 'finally' clause will
@@ -54,16 +85,21 @@ def server(log_buffer=sys.stderr):
                 #       created above when a client connected.  Replace the
                 #       call to `pass` below, which is only there to prevent 
                 #       syntax problems
-                pass
+                conn.close()
+                break
+            
             
     except KeyboardInterrupt:
         # TODO: Use the python KeyboardIntterupt exception as a signal to 
         #       close the server socket and exit from the server function. 
         #       Replace the call to `pass` below, which is only there to 
         #       prevent syntax problems
-        pass
+        #keyboard_signal = input()
+        sock.close()
+        sys.exit(0)
 
 
 if __name__ == '__main__':
     server()
+    sys.stdin.read() 
     sys.exit(0)
