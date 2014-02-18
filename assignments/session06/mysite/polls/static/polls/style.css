@@ -1,0 +1,47 @@
+/* BODY */
+a {
+    color: #ffc757;
+}
+li a {
+    color: #ffc757;
+}
+li {
+    color: #ffc757;
+}
+
+label {
+    color: #ffc757;
+}
+body {
+    background: #234f32;
+}
+body, th, td {
+    font:14px/1.4em Verdana,sans-serif;
+}
+
+/* HEADER */
+
+#header {
+    position:relative;
+    height:6.5em;
+    background:#092e20;
+}
+#header h1#logo {
+    margin:0;
+    width:111px;
+    height:41px;
+    position:absolute;
+    bottom:10px;
+    left:25px;
+    background: url("images/background.gif");
+}
+h1 {
+    position:relative;
+    height:6.5em;
+    background:#092e20;
+    color: white;
+}
+h2 {
+    color: white;
+    font-family: "Trebuchet MS",sans-serif;
+}

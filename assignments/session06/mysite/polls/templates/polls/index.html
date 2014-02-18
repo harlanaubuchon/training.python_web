@@ -1,3 +1,11 @@
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}" />
+
+    <div id="header">
+      <h1 id="logo"><a href="https://docs.djangoproject.com/en/1.5/intro/tutorial01/"></a></h1>
+    </div>
+
 {% if latest_poll_list %}
     <ul>
     {% for poll in latest_poll_list %}
