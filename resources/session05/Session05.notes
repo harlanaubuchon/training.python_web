@@ -1,0 +1,39 @@
+Session05.notes
+
+Links
+http://jinja.pocoo.org/docs/templates/
+
+Questions
+Why isn't the database zero based?  Isn't this going to be a pain later?
+
+insert = """
+INSERT INTO author (name) VALUES(?);"""
+authors = [["China Mieville"], ["Frank Herbert"],
+["J.R.R. Tolkien"], ["Susan Cooper"], ["Madeline L'Engle"]]
+with sqlite3.connect("books.db") as conn:
+    cur = conn.cursor()
+    cur.executemany(insert, authors)
+    print cur.rowcount
+    cur.close()
+
+query = """
+SELECT * from author;"""
+with sqlite3.connect("books.db") as conn:
+    cur = conn.cursor()
+    cur.execute(query)
+    rows = cur.fetchall()
+    for row in rows:
+        print row
+
+
+Always do this!!! Never %s
+def write_entry(title, text):
+    con = get_database_connection()
+    con.execute('insert into entries (title, text) values (?, ?)',
+                 [title, text])
+    con.commit()
+
+Add tests for login with session, without session,
+null values in title, id, etc
+Catch the KeyError in test for /add entry
+username, digest, salt as encrypted blob in user table

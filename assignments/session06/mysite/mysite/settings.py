@@ -7,12 +7,16 @@ ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 
+LOGIN_URL = '/login/'
+
+LOGIN_REDIRECT_URL = '/'
+
 MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '/home/nykhedimus/uw/python/q2/training.python_web/assignments/session06/mysite/mysite/sqlite3.db',                      # Or path to database file if using sqlite3.
+        'NAME': '/home/nyk/uw/q2/training.python_web/assignments/session06/mysite/mysite/sqlite3.db',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         #'USER': '',
         #'PASSWORD': '',
@@ -109,7 +113,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 TEMPLATE_DIRS = (
     # Put strings here, like 
-    "/home/nykhedimus/uw/python/q2/training.python_web/assignments/session06/mysite/templates"
+    "/home/nykhedimus/uw/python/q2/training.python_web/assignments/session06/mysite/mysite/templates/"
     # or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -127,6 +131,8 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'polls',
+    'south',
+    'myblog'
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
